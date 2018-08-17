@@ -1,0 +1,91 @@
+分页的作用：
+	减少一次性从数据库取太多东西。减少带宽。
+
+	
+#从第50条数据开始往后获取十条数据
+select * from tablename offset 50 limit 10;
+select * from tablename limit 50,10;
+
+django中的分页实现：
+from django.core.paginator import Paginator
+
+objects.all()
+由于惰性查询机制，并不是直接把所有数据从数据中取出。
+
+
+模型类的各种方法：
+>>>a = CustomerInfo.objects.get(id=1)
+>>>dir(a)
+['DoesNotExist', 'MultipleObjectsReturned', '__class__', '__delattr__', '__dict_
+_', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__',
+'__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__mo
+dule__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__seta
+ttr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref_
+_', '_base_manager', '_check_column_name_clashes', '_check_field_name_clashes',
+'_check_fields', '_check_id_field', '_check_index_together', '_check_local_field
+s', '_check_long_column_names', '_check_m2m_through_same_relationship', '_check_
+managers', '_check_model', '_check_ordering', '_check_swappable', '_check_unique
+_together', '_default_manager', '_deferred', '_do_insert', '_do_update', '_get_F
+IELD_display', '_get_next_or_previous_by_FIELD', '_get_next_or_previous_in_order
+', '_get_pk_val', '_get_unique_checks', '_meta', '_perform_date_checks', '_perfo
+rm_unique_checks', '_save_parents', '_save_table', '_set_pk_val', '_state', 'che
+ck', 'clean', 'clean_fields', 'consult_content', 'consultant', 'consultant_id',
+'contact', 'contact_type', 'contact_type_choices', 'customerfollowup_set', 'cust
+omerinfo_set', 'date', 'date_error_message', 'delete', 'from_db', 'full_clean',
+'get_contact_type_display', 'get_deferred_fields', 'get_next_by_date', 'get_prev
+ious_by_date', 'get_source_display', 'get_status_display', 'id', 'name', 'object
+s', 'pk', 'prepare_database_save', 'refferal_from', 'refferal_from_id', 'refresh
+_from_db', 'save', 'save_base', 'serializable_value', 'sonsult_courses', 'source
+', 'source_choices', 'status', 'status_choices', 'student_set', 'unique_error_me
+ssage', 'validate_unique']
+
+>>>a = CustomerInfo.objects.get(id=1)
+>>>dir(a._meta)
+>>>a._meta.model._meta.verbose_name
+['FORWARD_PROPERTIES', 'REVERSE_PROPERTIES', '__class__', '__delattr__', '__dict
+__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__',
+ '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__m
+odule__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__set
+attr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_expire_ca
+che', '_forward_fields_map', '_get_fields', '_get_fields_cache', '_map_model', '
+_map_model_details', '_populate_directed_relation_graph', '_prepare', '_relation
+_tree', 'abstract', 'abstract_managers', 'add_field', 'app_config', 'app_label',
+ 'apps', 'auto_created', 'auto_field', 'concrete_fields', 'concrete_managers', '
+concrete_model', 'contribute_to_class', 'db_table', 'db_tablespace', 'default_pe
+rmissions', 'default_related_name', 'fields', 'fields_map', 'get_all_field_names
+', 'get_all_related_m2m_objects_with_model', 'get_all_related_many_to_many_objec
+ts', 'get_all_related_objects', 'get_all_related_objects_with_model', 'get_ances
+tor_link', 'get_base_chain', 'get_concrete_fields_with_model', 'get_field', 'get
+_field_by_name', 'get_fields', 'get_fields_with_model', 'get_latest_by', 'get_m2
+m_with_model', 'get_parent_list', 'has_auto_field', 'index_together', 'installed
+', 'local_concrete_fields', 'local_fields', 'local_many_to_many', 'managed', 'ma
+nagers', 'many_to_many', 'model', 'model_name', 'object_name', 'order_with_respe
+ct_to', 'ordering', 'original_attrs', 'parents', 'permissions', 'pk', 'proxied_c
+hildren', 'proxy', 'proxy_for_model', 'related_fkey_lookups', 'related_objects',
+ 'select_on_save', 'setup_pk', 'setup_proxy', 'swappable', 'swapped', 'unique_to
+gether', 'verbose_name', 'verbose_name_plural', 'verbose_name_raw', 'virtual_fie
+lds']
+
+搜索功能
+--------------
+使用模型的 Q语句
+from django.db.models import Q
+q =Q()
+q.connector = 'OR'
+q.children.append(('contact__contains','33'))
+q.children.append(('consultant__contains','33'))
+models.CustomerInfo.objects.filter(q)
+
+动态展示form表单
+也就是要动态生成Form表单使用type方法 type(,(),kwargs)
+
+前端页面对数据的增删改查方法：
+ form表单：form表单可以对数据进行验证。
+ ajax：不会重新加载页面。
+ 
+ 
+
+
+
+
+

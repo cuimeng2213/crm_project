@@ -1,0 +1,56 @@
+{% extends 'kingadmin/index.html'%}
+{% load kingadmin_tags %}
+{% block content %}
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h2 class="page-header">APP</h2>  
+			<div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<form>
+							<input type='search' name='_q' class='form-control' value='{{admin_class.search_key }}' placeholder='{% for s in admin_class.search_field %}{{s}},{%endfor%}'/>
+							{% for k,v in admin_class.filter_conditions %}
+								<input type='hidden' name='{{k}}' value='{{v}}'/>
+							{% endfor %}
+							<input type='submit' class='btn' value='提交'/> 
+						</form>
+					</div>
+					
+				</div>
+			{# 如果过滤列表为空不展示过滤操作 #}
+			{% if admin_class.list_filter %}
+				<form>
+				{%for filter_column in admin_class.list_filter %}
+					{% build_filter_ele filter_column admin_class %}
+				{% endfor%}
+				<input type='hidden' name='_o' value='{% get_sorted_column_index sorted_o%}'  />
+				<input type='submit' class='btn btn-success' value='过滤' />
+				</form>
+			{% endif %}
+			</div>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+					{% if admin_class.list_display %}
+						{% for column in admin_class.list_display %}
+							{#<th><a href="?_o={{forloop.counter0}}"> {{ column }} </a></th>#}
+							<th><a href="?_o={% render_sorted_url forloop.counter0 column sorted_o %}{% render_filter_arg admin_class %}"> {{ column }}{% render_sorted_arrow column sorted_o %} </a></th>
+						{% endfor %}
+					{% else %}
+						{#如果list_display为空展示模型类名称通过.扩展模板tag获取模型名称#}
+						<th>{% get_model_name admin_class %}</th>
+					{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+				<!--自定义标签实现反射获取对应选项的信息 -->
+					{% for obj in querysets%}
+						<tr>{% build_table_row obj admin_class %}</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+			{# 使用扩展templatetag展示分页#}
+			{% render_paginator_btn querysets admin_class sorted_o%}		
+        </div>
+{% endblock %}
+
