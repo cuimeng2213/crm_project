@@ -9,6 +9,12 @@ class CustomerForm(ModelForm):
 	class Meta:
 		model = models.CustomerInfo
 		fields = '__all__'
+	def __new__(cls,*args, **kwargs):
+		print(cls.base_fields)
+		for field_name in cls.base_fields:
+			field_obj = cls.base_fields[field_name]
+			field_obj.widget.attrs.update({'class':'form-control'})
+		return ModelForm.__new__(cls)
 
 
 def create_dynamic_model_form(self, admin_class):

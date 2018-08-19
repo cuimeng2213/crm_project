@@ -10,8 +10,6 @@ import importlib
 from django.db.models import Q
 from . import form_handle
 
-
-
 #动态导入settings文件的installed_apps
 app_setup.kingadmin_auto_discover()
 '''
@@ -86,7 +84,7 @@ def table_obj_list(request, app_name, model_name):
 	#获取模型类
 	print('>>>table_obj_list :  ', request.GET)
 	admin_class = site.enabled_admins[app_name][model_name]
-	querysets = admin_class.model.objects.all()
+	querysets = admin_class.model.objects.all().order_by('-id')
 	querysets,filter_conditions = filter_by_options(request, querysets)
 	admin_class.filter_conditions = filter_conditions
 
@@ -112,8 +110,31 @@ def table_obj_list(request, app_name, model_name):
 @login_required
 def table_obj_change(request, app_name, model_name, obj_id):
 	# from crm.forms import CustomerForm
-	# form = CustomerForm()
+	# form_obj = CustomerForm()
 	admin_class = site.enabled_admins[app_name][model_name]
 	model_form = form_handle.create_dynamic_model_form(admin_class)
-	form_obj = model_form()
+	obj = admin_class.model.objects.get(id=obj_id)
+	if request.method == 'GET':
+		form_obj = model_form(instance=obj)
+	elif request.method == 'POST':
+		form_obj = model_form(instance=obj, data=request.POST)
+		if form_obj.is_valid():
+			form_obj.save()
+			return redirect('/kingadmin/%s/%s/'%(app_name,model_name))
+
 	return render( request, 'kingadmin/table_obj_change.html', locals() )
+@login_required
+def table_obj_add(request, app_name, model_name):
+	'''
+		新增数据视图
+	'''
+	admin_class = site.enabled_admins[app_name][model_name]
+	model_form = form_handle.create_dynamic_model_form(admin_class, form_add=True)
+	if request.method == 'GET':
+		form_obj = model_form()
+	elif request.method == 'POST':#添加数据
+		form_obj = model_form(data=request.POST)
+		if form_obj.is_valid():
+			form_obj.save()
+		return redirect('/kingadmin/%s/%s' % (app_name,model_name))
+	return render(request, 'kingadmin/table_obj_add.html',locals())

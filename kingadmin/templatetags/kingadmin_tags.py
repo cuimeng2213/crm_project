@@ -2,6 +2,31 @@ from django.template import Library
 from django.utils.safestring import mark_safe
 import datetime, time
 register = Library()
+@register.simple_tag
+def get_selected_m2m_data(field_name, form_obj, admin_class):
+	'''
+	返回已经选择的m2m数据信息
+	'''
+	select_data = getattr(form_obj.instance, field_name).all()
+	return select_data
+
+
+@register.simple_tag
+def get_available_m2m_data(field_name, form_obj, admin_class):
+	'''
+	返回m2m关联的所有数据
+	'''
+	#获取字段对象
+	field_obj = admin_class.model._meta.get_field(field_name)
+	#获取mantyToMany字段对应的所有数据
+	obj_list = set(field_obj.related_model.objects.all())
+	select_data = set(getattr(form_obj.instance, field_name).all())
+	#差集
+	return obj_list - select_data
+
+@register.simple_tag
+def get_obj_field_val(form_obj, field): 
+	return getattr(form_obj.instance, field)
 
 @register.simple_tag
 def get_sorted_column_index(sorted_o):

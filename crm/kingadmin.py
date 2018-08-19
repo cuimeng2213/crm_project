@@ -11,6 +11,8 @@ class CustomerAdmin(BaseKingAdmin):
 	list_display = ['id','name','source','contact_type','contact','consultant','consult_content','status','date']
 	list_filter = ['source','contact_type','consultant','date']
 	search_field = ['contact','consultant__name']
+	readonly_fields = ['contact','status']
+	filter_horizontal = ['sonsult_courses']
 	
 site.register(models.CustomerInfo,CustomerAdmin)
 site.register(models.Menus)

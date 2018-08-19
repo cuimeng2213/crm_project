@@ -4,5 +4,6 @@ urlpatterns = [
 	url(r'$^', app_index, name='kingadmin'),
 	url(r'login/', acc_login),
 	url(r'^(\w+)/(\w+)/$', table_obj_list, name='table_obj_list'),
-	url(r'^(\w+)/(\w+)/(\d+)/change/', table_obj_change, name='table_obj_change'),
+	url(r'^(\w+)/(\w+)/(\d+)/change/$', table_obj_change, name='table_obj_change'),
+	url(r'^(\w+)/(\w+)/add/$', table_obj_add, name='table_obj_add'),
 ]

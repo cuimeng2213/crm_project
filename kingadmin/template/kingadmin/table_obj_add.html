@@ -4,7 +4,7 @@
 {% block content %}
  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	<h2 class="page-header">{% get_model_name admin_class%}</h2>   
-	<h4 class="page-header">{{form_obj.instance}}</h4>
+	<h4 class="page-header">添加【{% get_model_name admin_class%}】数据</h4>
 	{% include 'kingadmin/table_obj_change_component.html'%}
 </div>
 {% endblock %}
