@@ -13,6 +13,9 @@ class CustomerAdmin(BaseKingAdmin):
 	search_field = ['contact','consultant__name']
 	readonly_fields = ['contact','status']
 	filter_horizontal = ['sonsult_courses']
+	actions = ["change_status"]
+	def change_status(self):
+		pass
 	
 site.register(models.CustomerInfo,CustomerAdmin)
 site.register(models.Menus)

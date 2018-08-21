@@ -8,3 +8,4 @@ class BaseKingAdmin(object):
 	search_field = []
 	readonly_fields = []
 	filter_horizontal = []
+	actions = ["ssssss"]

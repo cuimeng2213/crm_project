@@ -27,10 +27,29 @@
 				</form>
 			{% endif %}
 			</div>
+			<br>
+			
+			<form onsubmit="action_check(this)" method="post">{% csrf_token %}
+				<div class="row">
+					<div class="col-sm-3">
+						<select  class="form-control" name="action">
+							<option value="">------ACTION-------</option>
+							{% for action in admin_class.actions %}
+								<option value="{{option}}"></option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<input type="submit" value="GO" />
+					</div>
+				</div>
+			</form>
+			
 			<table class="table table-striped">
 				<thead>
 					<tr>
 					{% if admin_class.list_display %}
+						<th><input type="checkbox" onclick="SelectAll(this)"/></th>
 						{% for column in admin_class.list_display %}
 							{#<th><a href="?_o={{forloop.counter0}}"> {{ column }} </a></th>#}
 							<th><a href="?_o={% render_sorted_url forloop.counter0 column sorted_o %}{% render_filter_arg admin_class %}"> {{ column }}{% render_sorted_arrow column sorted_o %} </a></th>
@@ -44,7 +63,10 @@
 				<tbody>
 				<!--自定义标签实现反射获取对应选项的信息 -->
 					{% for obj in querysets%}
-						<tr>{% build_table_row obj admin_class %}</tr>
+						<tr>
+							<td><input type="checkbox" row-select="true" value="{{obj.id}}"/></td>
+							{% build_table_row obj admin_class %}
+						</tr>
 					{% endfor %}
 				</tbody>
 			</table>
@@ -52,5 +74,23 @@
 			{# 使用扩展templatetag展示分页#}
 			{% render_paginator_btn querysets admin_class sorted_o%}		
         </div>
+		<script language="javascript">
+			function SelectAll(ele){
+				if($(ele).prop("checked")){
+					$("input[row-select]").prop("checked",true);
+				}else{
+					$("input[row-select]").prop("checked",false);
+				}
+			}
+			function action_check(ele){
+				var selected_action = $("select[name='action']").val()
+				var selected_objs = $("input[row-select]").filter(":checked")
+				if( selected_action.length == 0 ){
+					alert("no action selected");
+					return false;//为什么returnfalse
+				}else{
+				}
+			}
+		</script>
 {% endblock %}
 

@@ -82,6 +82,16 @@ models.CustomerInfo.objects.filter(q)
 前端页面对数据的增删改查方法：
  form表单：form表单可以对数据进行验证。
  ajax：不会重新加载页面。
+
+页面action实现
+
+在admin.py中：
+
+actions = ['change_status']
+def change_status(self,request,queryset):
+	#将所有报名状态修改为1已经报名
+	queryset.update(status=1)
+
  
  
 
