@@ -92,6 +92,13 @@ def change_status(self,request,queryset):
 	#将所有报名状态修改为1已经报名
 	queryset.update(status=1)
 
+csrf
+--------
+跨域请求保护
+	同源策略：
+		也就是这能访问自己域名的cookie属性
+
+
  
  
 

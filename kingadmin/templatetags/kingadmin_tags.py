@@ -22,6 +22,7 @@ def get_available_m2m_data(field_name, form_obj, admin_class):
 	obj_list = set(field_obj.related_model.objects.all())
 	select_data = set(getattr(form_obj.instance, field_name).all())
 	#差集
+	print("ssssss: ",obj_list,select_data)
 	return obj_list - select_data
 
 @register.simple_tag

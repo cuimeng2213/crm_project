@@ -78,7 +78,8 @@ def get_searched_result(request,querysets,admin_class):
 		for search_field in admin_class.search_field:
 			q.children.append(('%s__contains'%search_field, search_key))
 		return querysets.filter(q),search_key
-	return querysets,search_key	
+	return querysets,search_key
+	
 @login_required
 def table_obj_list(request, app_name, model_name):
 	#获取模型类
@@ -116,12 +117,12 @@ def table_obj_change(request, app_name, model_name, obj_id):
 	obj = admin_class.model.objects.get(id=obj_id)
 	if request.method == 'GET':
 		form_obj = model_form(instance=obj)
+		print(dir(form_obj.instance))
 	elif request.method == 'POST':
 		form_obj = model_form(instance=obj, data=request.POST)
 		if form_obj.is_valid():
 			form_obj.save()
 			return redirect('/kingadmin/%s/%s/'%(app_name,model_name))
-
 	return render( request, 'kingadmin/table_obj_change.html', locals() )
 @login_required
 def table_obj_add(request, app_name, model_name):

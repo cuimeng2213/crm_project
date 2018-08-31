@@ -8,6 +8,10 @@ class CustomerAdmin(admin.ModelAdmin):
 	#consultant是外键需要指定所搜属性
 	search_fields = ['contact','consultant_name']
 	list_per_page = 2
+	
+	actions = ["change_status"]
+	def change_status(self, *args, **kwargs):
+		print("change_status")
 
 
 admin.site.register(UserProfile)

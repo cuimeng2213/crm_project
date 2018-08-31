@@ -45,12 +45,38 @@
 			  </div>
 			  {% endfor %}
 		 {% endif %}
-		<div class="form-group">
+		<div class="row">
 			<div class="col-sm-offset-3 col-sm-1">
-				<a class="btn btn-danger" href="">Delete</a>
+				<!-- Button trigger modal -->
+				<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+				  Delate
+				</button>
+
 			</div>
-			<div class="col-sm-offset-10 col-sm-1">
+			<div class="col-sm-offset-5 col-sm-1">
 				<button type="submit" class="btn btn-success">Save</button>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">确认要删除吗？</h4>
+					</div>
+					<div class="modal-body">
+						{{form_obj.instance.name}}
+						<form method="post" action="/kingadmin/{% get_model_name admin_class%}/">
+							<input hidden type="text" name="del_id" value="{{form_obj.instance.id}}">
+						</form>
+						
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="deleteBtn" class="btn btn-primary">确认</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</form>
@@ -93,6 +119,7 @@
 			}
 		});
 	}
+
 </script>
 
 
